@@ -1,6 +1,6 @@
 {
   "name": "screenwire",
-  "version": "0.1.32",
+  "version": "0.1.33",
   "description": "Native screen recording for Node.js and Electron — macOS (ScreenCaptureKit)",
   "main": "index.js",
   "scripts": {
@@ -36,11 +36,11 @@
   "author": "ldanadrian",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ldanadrian/screenwire"
+    "url": "https://github.com/ldanadrian/screenwire-node"
   },
   "homepage": "https://breakingpoint.ro/produse/screenwire",
   "bugs": {
-    "url": "https://github.com/ldanadrian/screenwire/issues"
+    "url": "https://github.com/ldanadrian/screenwire-node/issues"
   },
   "files": [
     "index.js",
