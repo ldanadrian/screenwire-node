@@ -1,0 +1,63 @@
+{
+  "name": "screenwire",
+  "version": "0.1.32",
+  "description": "Native screen recording for Node.js and Electron — macOS (ScreenCaptureKit)",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "build:windows:dll": "node scripts/build-windows-dll.js",
+    "build:windows:addon": "node-gyp rebuild",
+    "build:windows": "node scripts/build-windows-dll.js && node-gyp rebuild",
+    "verify:windows-runtime": "node scripts/verify-windows-runtime.js"
+  },
+  "dependencies": {
+    "node-addon-api": "^8.7.0"
+  },
+  "devDependencies": {
+    "node-gyp": "^12.1.0"
+  },
+  "gypfile": false,
+  "os": [
+    "darwin",
+    "win32"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "screen-recording",
+    "screencapture",
+    "electron",
+    "macos",
+    "native",
+    "napi"
+  ],
+  "license": "MIT",
+  "author": "ldanadrian",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ldanadrian/screenwire"
+  },
+  "homepage": "https://breakingpoint.ro/produse/screenwire",
+  "bugs": {
+    "url": "https://github.com/ldanadrian/screenwire/issues"
+  },
+  "files": [
+    "index.js",
+    "builds/macos/screenwire.node",
+    "builds/windows/screenwire.node",
+    "builds/windows/ScreenWireWindows.dll",
+    "builds/windows/D3DCompiler_47_cor3.dll",
+    "builds/windows/PenImc_cor3.dll",
+    "builds/windows/PresentationNative_cor3.dll",
+    "builds/windows/vcruntime140_cor3.dll",
+    "builds/windows/wpfgfx_cor3.dll",
+    "builds/windows/ffmpeg",
+    "builds/macos/libScreenWireCore.dylib",
+    "src",
+    "core",
+    "scripts/install.js",
+    "binding.gyp",
+    "README.md"
+  ]
+}
