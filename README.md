@@ -23,17 +23,19 @@ No native compilation happens during install. The prebuilt `.node` addon and all
 
 ## Usage
 
-### Async / await (recommended)
+### Basic example
 
 ```js
 const recorder = require('screenwire')
 const path = require('path')
+const os = require('os')
 
-const outputPath = path.join(require('os').homedir(), 'Desktop', 'recording.mp4')
+const outputPath = path.join(os.homedir(), 'Desktop', 'recording.mp4')
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 async function main() {
   await recorder.startAsync(outputPath)
+  console.log('Recording started...')
 
   await sleep(5000)
 
@@ -44,15 +46,34 @@ async function main() {
 main()
 ```
 
-### Callback
+### With options
+
+`audio` controls system audio (what plays through your speakers). `microphone` controls mic input. Both default to `true` — omit either to keep it on.
+
+```js
+// Screen + system audio + microphone (default)
+await recorder.startAsync(outputPath)
+
+// Screen + microphone only — no system audio
+await recorder.startAsync(outputPath, { audio: false })
+
+// Screen + system audio only — no microphone
+await recorder.startAsync(outputPath, { microphone: false })
+
+// Screen only — no audio at all
+await recorder.startAsync(outputPath, { audio: false, microphone: false })
+```
+
+### Callback style
 
 ```js
 const recorder = require('screenwire')
 const path = require('path')
+const os = require('os')
 
-const outputPath = path.join(require('os').homedir(), 'Desktop', 'recording.mp4')
+const outputPath = path.join(os.homedir(), 'Desktop', 'recording.mp4')
 
-recorder.start(outputPath, (status) => {
+recorder.start(outputPath, { microphone: false }, (status) => {
   console.log('[status]', status)
 })
 
@@ -65,7 +86,7 @@ setTimeout(() => {
 
 ## API
 
-#### `recorder.startAsync(outputPath) → Promise<string>`
+#### `recorder.startAsync(outputPath[, options]) → Promise<string>`
 
 Starts recording to the given `.mp4` file path. Resolves once recording is active.
 
@@ -73,7 +94,7 @@ Starts recording to the given `.mp4` file path. Resolves once recording is activ
 
 Stops recording and finalizes the file. Resolves with the final status string once the file is saved.
 
-#### `recorder.start(outputPath, onStatus)`
+#### `recorder.start(outputPath[, options], onStatus)`
 
 Callback version of `startAsync`. `onStatus(message)` is called with progress strings as recording proceeds.
 
@@ -81,9 +102,18 @@ Callback version of `startAsync`. `onStatus(message)` is called with progress st
 
 Callback version of `stopAsync`. `onStatus(message)` is called with the final status string.
 
-#### `recorder.isRecording()`
+#### `recorder.isRecording() → boolean`
 
 Returns `true` if a recording is currently in progress.
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `audio` | `boolean` | `true` | Capture system audio (what plays through speakers) |
+| `microphone` | `boolean` | `true` | Capture microphone input |
+
+Options are optional — omitting a key keeps the default. Omitting the options object entirely is the same as `{ audio: true, microphone: true }`.
 
 ## Status strings
 
@@ -97,7 +127,7 @@ Returns `true` if a recording is currently in progress.
 
 ## Platform notes
 
-**macOS** captures screen, system audio, and microphone using ScreenCaptureKit. The OS will show a permission prompt on first use — grant Screen Recording access to your terminal or app in System Settings → Privacy & Security.
+**macOS** captures screen, system audio, and microphone using ScreenCaptureKit. The OS will prompt for Screen Recording permission on first use — grant access in System Settings → Privacy & Security. Microphone capture requires macOS 15 or newer.
 
 **Windows** captures screen via GDI/ffmpeg and system audio via direct WASAPI loopback COM P/Invoke. Microphone is captured via NAudio if a device is present. All native DLLs and ffmpeg are bundled inside the package.
 

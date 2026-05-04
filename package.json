@@ -1,6 +1,6 @@
 {
   "name": "screenwire",
-  "version": "0.1.41",
+  "version": "0.1.44",
   "description": "Native screen recording for Node.js and Electron — macOS (ScreenCaptureKit)",
   "main": "index.js",
   "scripts": {

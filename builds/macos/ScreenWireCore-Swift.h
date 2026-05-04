@@ -310,6 +310,7 @@ SWIFT_CLASS("_TtC14ScreenWireCore8Recorder")
 @property (nonatomic, readonly) BOOL isRecording;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (void)startTo:(NSURL * _Nonnull)url;
+- (void)startTo:(NSURL * _Nonnull)url audio:(BOOL)audio microphone:(BOOL)microphone;
 - (void)stop;
 @end
 

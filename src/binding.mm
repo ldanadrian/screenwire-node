@@ -11,16 +11,39 @@ static void forwardStatus(const char* status) {
     });
 }
 
+static screenwire_options_t parseOptions(Napi::Object opts) {
+    screenwire_options_t options = { 1, 1 };
+    if (opts.Has("audio") && opts.Get("audio").IsBoolean())
+        options.audio = opts.Get("audio").As<Napi::Boolean>().Value() ? 1 : 0;
+    if (opts.Has("microphone") && opts.Get("microphone").IsBoolean())
+        options.microphone = opts.Get("microphone").As<Napi::Boolean>().Value() ? 1 : 0;
+    return options;
+}
+
 // start(outputPath, callback)
+// start(outputPath, options, callback)
 Napi::Value Start(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-    if (info.Length() < 2 || !info[0].IsString() || !info[1].IsFunction()) {
-        Napi::TypeError::New(env, "expected (string, function)").ThrowAsJavaScriptException();
+
+    std::string outputPath;
+    screenwire_options_t options = { 1, 1 };
+    Napi::Function callback;
+
+    if (info.Length() >= 3 && info[0].IsString() && info[1].IsObject() && info[2].IsFunction()) {
+        outputPath = info[0].As<Napi::String>().Utf8Value();
+        options = parseOptions(info[1].As<Napi::Object>());
+        callback = info[2].As<Napi::Function>();
+    } else if (info.Length() >= 2 && info[0].IsString() && info[1].IsFunction()) {
+        outputPath = info[0].As<Napi::String>().Utf8Value();
+        callback = info[1].As<Napi::Function>();
+    } else {
+        Napi::TypeError::New(env, "expected (string, [options], function)").ThrowAsJavaScriptException();
         return env.Undefined();
     }
+
     if (g_tsfn) g_tsfn.Release();
-    g_tsfn = Napi::ThreadSafeFunction::New(env, info[1].As<Napi::Function>(), "screenwire", 0, 1);
-    screenwire_start(info[0].As<Napi::String>().Utf8Value().c_str(), forwardStatus);
+    g_tsfn = Napi::ThreadSafeFunction::New(env, callback, "screenwire", 0, 1);
+    screenwire_start_with_options(outputPath.c_str(), options, forwardStatus);
     return env.Undefined();
 }
 
