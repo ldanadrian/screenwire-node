@@ -1,5 +1,7 @@
 # screenwire
 
+![screenwire](https://raw.githubusercontent.com/ldanadrian/screenwire-node/main/ss1.png)
+
 Native screen recording for Node.js and Electron — macOS and Windows.
 
 - **macOS** — ScreenCaptureKit (macOS 13+, Apple Silicon)
